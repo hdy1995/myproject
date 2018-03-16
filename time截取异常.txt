@@ -1,0 +1,10 @@
+<RECORD>
+      <id>27576</id>
+      <article>#丰台区少年警校成立#丰台区少年警校由丰台警方和丰台区团委、教委共同组办，招收对象是在校的中小学生，孩子们在警校将进行法律法规、自救与救护常识的学习，参加各种户政办理、出入境、模拟现场等警务工作实践活动，还能接触到枪支等警用装备。</article>
+      <discuss>39</discuss>
+      <insertTime>2011/11/29 14:22:10</insertTime>
+      <origin>新浪微博</origin>
+      <person_id>1288915263</person_id>
+      <time>2011/7/21 14:44:04</time>
+      <transmit>0</transmit>
+</RECORD>

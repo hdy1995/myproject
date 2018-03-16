@@ -4,7 +4,6 @@ import xml.sax
 import re
 
 
-
 class WeiboHandler(xml.sax.ContentHandler):
 
     def __init__(self):
@@ -24,9 +23,9 @@ class WeiboHandler(xml.sax.ContentHandler):
     def startElement(self, tag, attributes):
         self.CurrentData = tag
         # if tag == "RECORD":
-            # print("*****RECORD*****")
-            # title = attributes["title"]
-            # print("Title:", title)
+        # print("*****RECORD*****")
+        # title = attributes["title"]
+        # print("Title:", title)
 
     # 元素结束调用
     def endElement(self, tag):
@@ -35,7 +34,8 @@ class WeiboHandler(xml.sax.ContentHandler):
             self.Id.append(self.id)
             # print("Id:", Id)
         elif self.CurrentData == "article":
-            self.article = re.sub(r'@ .*? |@.*? |//@.*$|[a-zA-z]+://[^\s]*|[→]|转发微博|分享图片|手机测试|回复|_.*? ', "", self.article)
+            self.article = re.sub(r'@ .*? |@.*? |//@.*$|[a-zA-z]+://[^\s]*|[→]|转发微博|分享图片|手机测试|回复|_.*? ', "",
+                                  self.article)
 
             # print("article:", self.article)
             # self.article = re.findall(r'#.*?#', self.article)
@@ -44,14 +44,14 @@ class WeiboHandler(xml.sax.ContentHandler):
             self.Article.append(self.article)
             # print("Article:", Article)
         # elif self.CurrentData == "discuss":
-            # print("discuss:", self.discuss)
-            # self.Discuss.append(self.discuss)
+        # print("discuss:", self.discuss)
+        # self.Discuss.append(self.discuss)
         elif self.CurrentData == "time":
             # print("time:", self.time)
             self.Time.append(self.time)
         # elif self.CurrentData == "transmit":
-            # print("transmit:", self.transmit)
-            # self.Transmit.append(self.transmit)
+        # print("transmit:", self.transmit)
+        # self.Transmit.append(self.transmit)
         self.CurrentData = ""
 
     # 读取字符时调用
@@ -61,14 +61,14 @@ class WeiboHandler(xml.sax.ContentHandler):
         elif self.CurrentData == "article":
             self.article = content
         # elif self.CurrentData == "discuss":
-            # self.discuss = content
+        # self.discuss = content
         elif self.CurrentData == "time":
             self.time = content
         # elif self.CurrentData == "transmit":
-            # self.transmit = content
+        # self.transmit = content
+
 
 def read_xml():
-#if __name__ == "__main__":
     # 创建一个 XMLReader
     parser = xml.sax.make_parser()
     # turn off namepsaces
@@ -80,4 +80,3 @@ def read_xml():
     parser.parse("test.xml")
     return Handler.Id, Handler.Article, Handler.Time
     # return Handler.Id, Handler.Article, Handler.Discuss, Handler.Time, Handler.Transmit
-
