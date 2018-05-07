@@ -12,63 +12,49 @@ class WeiboHandler(xml.sax.ContentHandler):
         self.Id = []
         self.article = ""
         self.Article = []
-        # self.discuss = ""
-        # self.Discuss = []
         self.time = ""
         self.Time = []
-        # self.transmit = ""
-        # self.Transmit = []
 
     # 元素开始调用
     def startElement(self, tag, attributes):
         self.CurrentData = tag
-        # if tag == "RECORD":
-        # print("*****RECORD*****")
-        # title = attributes["title"]
-        # print("Title:", title)
 
     # 元素结束调用
+    # 标签名根据xml文件自身情况更改
     def endElement(self, tag):
-        if self.CurrentData == "id":
+        # if self.CurrentData == "id":
+        if self.CurrentData == "weiboId":
             # print("id:", self.id)
             self.Id.append(self.id)
-            # print("Id:", Id)
-        elif self.CurrentData == "article":
-            self.article = re.sub(r'@ .*? |@.*? |//@.*$|[a-zA-z]+://[^\s]*|[→]|转发微博|分享图片|手机测试|回复|_.*? ', "",
-                                  self.article)
-
+            # print("Id:", self.Id)
+        # elif self.CurrentData == "article":
+        elif self.CurrentData == "text":
+            self.article = re.sub(r'【.*?要闻回顾】|转发微博|\[.*?\]|（分享自 @.*?）|（来自.*?）|（via.*?）|奉上今日《台州商报》主要内容|@ .*? |@.*? |//@.*$|→[a-zA-z]+://[^\s]*|[a-zA-z]+://[^\s]*| - .*$|_.*? |&.*?;|quot;|apos;|amp;|lt;|gt;', "", self.article)
             # print("article:", self.article)
             # self.article = re.findall(r'#.*?#', self.article)
             # print("重点:", self.article)
-
             self.Article.append(self.article)
             # print("Article:", Article)
-        # elif self.CurrentData == "discuss":
-        # print("discuss:", self.discuss)
-        # self.Discuss.append(self.discuss)
-        elif self.CurrentData == "time":
+        # elif self.CurrentData == "time":
+        elif self.CurrentData == "created_at":
             # print("time:", self.time)
             self.Time.append(self.time)
-        # elif self.CurrentData == "transmit":
-        # print("transmit:", self.transmit)
-        # self.Transmit.append(self.transmit)
         self.CurrentData = ""
 
     # 读取字符时调用
     def characters(self, content):
-        if self.CurrentData == "id":
+        # if self.CurrentData == "id":
+        if self.CurrentData == "weiboId":
             self.id = content
-        elif self.CurrentData == "article":
+        # elif self.CurrentData == "article":
+        elif self.CurrentData == "text":
             self.article = content
-        # elif self.CurrentData == "discuss":
-        # self.discuss = content
-        elif self.CurrentData == "time":
+        # elif self.CurrentData == "time":
+        elif self.CurrentData == "created_at":
             self.time = content
-        # elif self.CurrentData == "transmit":
-        # self.transmit = content
 
 
-def read_xml():
+def read_xml(file):
     # 创建一个 XMLReader
     parser = xml.sax.make_parser()
     # turn off namepsaces
@@ -77,6 +63,6 @@ def read_xml():
     # 重写 ContextHandler
     Handler = WeiboHandler()
     parser.setContentHandler(Handler)
-    parser.parse("test.xml")
+    # parser.parse('test.xml')
+    parser.parse(file)
     return Handler.Id, Handler.Article, Handler.Time
-    # return Handler.Id, Handler.Article, Handler.Discuss, Handler.Time, Handler.Transmit

@@ -2,20 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from copy import deepcopy
-import re
-
-try:
-    import psyco
-
-    psyco.full()
-except:
-    pass
-
-try:
-    from zh_wiki import zh2Hant, zh2Hans
-except ImportError:
-    from zhtools.zh_wiki import zh2Hant, zh2Hans
-
+from myproject.zh_wiki import zh2Hant, zh2Hans
 import sys
 
 py3k = sys.version_info >= (3, 0, 0)
@@ -29,7 +16,7 @@ else:
             new[k.decode('utf8')] = v.decode('utf8')
     zh2Hant = _zh2Hant
     zh2Hans = _zh2Hans
-    UEMPTY = ''.decode('utf8')
+    UEMPTY = ''
 
 # states
 (START, END, FAIL, WAIT_TAIL) = list(range(4))
@@ -277,8 +264,7 @@ def run():
     c = Converter(options.encoding)
     for line in file_in:
         # print >> file_out, c.convert(line.rstrip('\n').decode(
-        file_out.write(c.convert(line.rstrip('\n').decode(
-            'utf8')).encode('utf8'))
+        file_out.write(c.convert(line.rstrip('\n')).encode('utf8'))
 
 
 if __name__ == '__main__':

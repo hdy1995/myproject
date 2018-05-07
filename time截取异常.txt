@@ -8,3 +8,33 @@
       <time>2011/7/21 14:44:04</time>
       <transmit>0</transmit>
 </RECORD>
+<RECORD>
+      <id>27576</id>
+      <article>#丰台区少年警校成立#丰台区少年警校由丰台警方和丰台区团委、教委共同组办，招收对象是在校的中小学生，孩子们在警校将进行法律法规、自救与救护常识的学习，参加各种户政办理、出入境、模拟现场等警务工作实践活动，还能接触到枪支等警用装备。</article>
+      <discuss>39</discuss>
+      <insertTime>2011/11/29 14:22:10</insertTime>
+      <origin>新浪微博</origin>
+      <person_id>1288915263</person_id>
+      <time>2011/7/21 14:44:04</time>
+      <transmit>0</transmit>
+</RECORD>
+<RECORD>
+      <id>30781</id>
+      <article>【出租司机遇抢劫 挣断锁脖铁丝】嫌疑人李某试图抢劫，用铁丝勒住出租司机脖子，铁丝却被司机挣断。警方赶到现场发现，嫌疑男子将自己的手机、钱包、照片等物品及事先准备好的铁丝、布条等作案工具都遗留在了车内。近日，李某因涉嫌抢劫罪被提起公诉。http://t.cn/Sv73mf</article>
+      <discuss>18</discuss>
+      <insertTime>2011/11/29 14:29:43</insertTime>
+      <origin>皮皮时光机</origin>
+      <person_id>1644114654</person_id>
+      <time>2011/10/18 21:58:30</time>
+      <transmit>0</transmit>
+</RECORD>
+<RECORD>
+      <id>31520</id>
+      <article>【阳澄湖大闸蟹 “防伪”商标也有假】今年阳澄湖大闸蟹将于9月17日正式开捕，但北京一些海鲜摊主却声称已有阳澄湖大闸蟹在售。苏州市质量监督局表示，今年防伪标志尚未发下去，市面上带有“防伪标志”的均有问题。防伪主要依靠蟹钳上的防伪戒指，而戒指可以每只1到2元的价格买到。http://t.cn/a1Ri8y</article>
+      <discuss>30</discuss>
+      <insertTime>2011/11/29 14:31:06</insertTime>
+      <origin>新浪微博</origin>
+      <person_id>1644114654</person_id>
+      <time>2011/9/8 11:49:22</time>
+      <transmit>0</transmit>
+</RECORD>

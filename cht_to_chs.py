@@ -1,4 +1,4 @@
-from langconv import *
+from myproject.langconv import *
 
 
 # 转换繁体到简体
