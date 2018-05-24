@@ -19,9 +19,11 @@ class ClusterUnit:
         self.new_title = None  # 当前节点的时间
         self.first_title = None  # 该簇目前最早的时间
         self.last_title = None  # 该簇目前最晚的时间
-        self.comments = []  # 该簇目前包含的评论数
-        self.reposts = []  # 该簇目前包含的转发数
+        self.comments = []  # 该簇中每个结点的评论数
+        self.reposts = []  # 该簇中每个结点的转发数
         self.hot = 0  # 该簇的热度
+        self.c_num = 0  # 该簇总共的评论数
+        self.r_num = 0  # 该簇总共的转发数
 
     def addNode(self, node=0, node_vec=None, title=None, id=None, time=None, comments=0, reposts=0, max_similarity=1):
         """
@@ -43,6 +45,8 @@ class ClusterUnit:
         self.new_title = time
         self.comments.append(comments)
         self.reposts.append(reposts)
+        self.c_num = self.c_num + int(comments)
+        self.r_num = self.r_num + int(reposts)
         try:
             # 更新质心
             self.centroid = (self.node_num * self.centroid + node_vec) / (self.node_num + 1)
@@ -57,30 +61,3 @@ class ClusterUnit:
             self.last_title = self.new_title
         self.node_num += 1
 
-    def removeNode(self, node=0, node_vec=None, title=None, id=None, time=None, max_similarity=1):
-        try:
-            self.node_list.remove(node)
-            self.title_list.remove(title)
-            self.id_list.remove(id)
-            self.time_list.remove(time)
-            self.similarity_list.remove(max_similarity)
-            self.new_title = time
-            try:
-                self.centroid = (self.node_num * self.centroid - node_vec) / (self.node_num - 1)
-            except ZeroDivisionError:
-                self.centroid = None
-            self.node_num -= 1
-        except ValueError:
-            # 该结点不在簇中
-            raise ValueError("%s not in this cluster" % node)
-
-    def moveNode(self, node, node_vec, title, another_cluster):
-        # 移除本簇一个结点，到另一个簇中
-        self.removeNode(node=node, node_vec=node_vec, title=title)
-        another_cluster.addNode(node=node, node_vec=node_vec, title=title)
-
-    def printNode(self):
-        logging.info("簇中结点个数为:%s，簇质心为:%s" % self.node_num, self.centroid)
-        logging.info("各个结点如下:\n")
-        for title in self.title_list:
-            logging.info(title)
