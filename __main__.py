@@ -16,12 +16,14 @@ new_id_list = []
 new_title_list = []
 new_time_list = []
 new_vec_list = []
+new_comments = []
+new_reposts = []
 w2v_path = 'C:\\Users\\Administrator\\PycharmProjects\\untitled2\\test\\word2vec_wx'  # word2vec词向量所在路径
 xml_path = 'E:\\大学\\大四\\毕设\\test'  # 遍历路径下所有xml文件
 
-threshold = 0.8  # single-pass聚类的阈值
-day = 20  # 一个舆情持续的时间
-
+threshold = 0.75  # single-pass聚类的阈值
+day = 40  # 一个舆情持续的时间
+times = 1000  # 文本数量
 # word2vec模式下
 print('加载模型中，请稍候……')
 t1 = time.time()
@@ -46,12 +48,19 @@ for root, dirs, files in os.walk(xml_path):
             print('读取xml文件完成')
             print('读取xml文件耗时 %.5f 分钟' % (read_xml_time / 60))
 
-            # for n in range(2):  # 测试用
+            # for n in range(7):  # 测试用
             for n in range(len(text[0]) // 1000):  # 将xml中读取到的内容每1000个进行分块运行single-pass
                 print('*******************   ', n, '   *******************')
-                Id = text[0][1000 * (n + 0):1000 * (n + 1)]
-                Article = text[1][1000 * (n + 0):1000 * (n + 1)]
-                Time = text[2][1000 * (n + 0):1000 * (n + 1)]
+                # Id = text[0][1000 * (n + 0):1000 * (n + 1)]
+                # Article = text[1][1000 * (n + 0):1000 * (n + 1)]
+                # Time = text[2][1000 * (n + 0):1000 * (n + 1)]
+                # Comments = text[3][1000 * (n + 0):1000 * (n + 1)]
+                # Reposts = text[4][1000 * (n + 0):1000 * (n + 1)]
+                Id = text[0][times * (n + 0):times * (n + 1)]
+                Article = text[1][times * (n + 0):times * (n + 1)]
+                Time = text[2][times * (n + 0):times * (n + 1)]
+                Comments = text[3][times * (n + 0):times * (n + 1)]
+                Reposts = text[4][times * (n + 0):times * (n + 1)]
 
                 print('繁体转简体中，清稍候……')
                 t1 = time.time()
@@ -77,7 +86,7 @@ for root, dirs, files in os.walk(xml_path):
                 print('SinglePass聚类中，请稍候……')
                 t1 = time.time()
                 clustering = SinglePassCluster(threshold=threshold, vector_list=Vect, content_list=Article, id_list=Id,
-                                               time_list=Time, day=day, top=len(Id)//50)
+                                               time_list=Time, day=day, comments=Comments, reposts=Reposts, top=20)
                 t2 = time.time()
                 clustering_time = t2 - t1  # 记录聚类所用时间
                 print('聚类完成')
@@ -88,13 +97,32 @@ for root, dirs, files in os.walk(xml_path):
                 new_title_list.extend(new_list[1])
                 new_time_list.extend(new_list[2])
                 new_vec_list.extend(new_list[3])
+                new_comments.extend(new_list[4])
+                new_reposts.extend(new_list[5])
                 del clustering, new_list
-
+# output = open('new_id_list.pkl', 'wb')
+# pickle.dump(new_id_list, output)
+# output.close()
+# output = open('new_title_list.pkl', 'wb')
+# pickle.dump(new_title_list, output)
+# output.close()
+# output = open('new_time_list.pkl', 'wb')
+# pickle.dump(new_time_list, output)
+# output.close()
+# output = open('new_vec_list.pkl', 'wb')
+# pickle.dump(new_vec_list, output)
+# output.close()
+# output = open('new_comments.pkl', 'wb')
+# pickle.dump(new_comments, output)
+# output.close()
+# output = open('new_reposts.pkl', 'wb')
+# pickle.dump(new_reposts, output)
+# output.close()
 print("========================")
 print('SinglePass聚类中，请稍候……')
 t1 = time.time()
 clustering = SinglePassCluster(threshold=threshold, vector_list=new_vec_list, content_list=new_title_list,
-                               id_list=new_id_list, time_list=new_time_list, day=day, top=50)
+                               id_list=new_id_list, time_list=new_time_list, day=day, comments=new_comments, reposts=new_reposts, top=10)
 t2 = time.time()
 clustering_time = t2 - t1  # 记录聚类所用时间
 print('聚类完成')
@@ -105,9 +133,8 @@ t_end = time.time()
 cost_time = t_end - t_sta
 print("========================")
 print('总耗时 %.5f 分钟' % (cost_time / 60))
-'''
+
 # 将最终得到结点数最多的20个簇保存下来
-output = open('data.pkl', 'wb')
+output = open('test5.pkl', 'wb')
 pickle.dump(clustering, output)
 output.close()
-'''

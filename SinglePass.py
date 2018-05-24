@@ -9,7 +9,7 @@ import jieba.analyse
 
 
 class SinglePassCluster:
-    def __init__(self, threshold, vector_list, content_list, id_list, time_list, day, top=20):
+    def __init__(self, threshold, vector_list, content_list, id_list, time_list, day, comments, reposts, top=20):
         """
         :param threshold:一趟聚类的阈值
         :param vector_list:
@@ -21,6 +21,8 @@ class SinglePassCluster:
         self.time_list = time_list  # 存储每篇文章的时间
         self.cluster_list = []  # 聚类后簇的列表
         self.time_weight = (1-threshold)/day  # 时间权重初始化
+        self.comments = comments
+        self.reposts = reposts
         t1 = time.time()
         self.clustering()  # 聚类操作并统计聚类耗时
         t2 = time.time()
@@ -32,7 +34,7 @@ class SinglePassCluster:
         # 初始新建一个簇
         self.cluster_list.append(cluster_unit.ClusterUnit())
         # 读入的第一个文章（结点）归入第一个簇中
-        self.cluster_list[0].addNode(0, self.vectors[0], self.content_list[0], self.id_list[0], self.time_list[0])
+        self.cluster_list[0].addNode(0, self.vectors[0], self.content_list[0], self.id_list[0], self.time_list[0], self.comments[0], self.reposts[0])
         # 遍历所有的文章  开始进行聚类  index 从1->(len-1)
         for index in range(len(self.vectors))[1:]:
             if index % 100 == 0:
@@ -70,11 +72,11 @@ class SinglePassCluster:
             # 最大相似度大于阈值，则归于该簇
             if max_similarity > self.threshold:
                 self.cluster_list[max_cluster_index].addNode(index, current_vector, self.content_list[index],
-                                                             self.id_list[index], self.time_list[index], max_similarity)
+                                                             self.id_list[index], self.time_list[index], self.comments[index], self.reposts[index], max_similarity)
             else:
                 new_cluster = cluster_unit.ClusterUnit()
                 new_cluster.addNode(index, current_vector, self.content_list[index], self.id_list[index],
-                                    self.time_list[index])
+                                    self.time_list[index], self.comments[index], self.reposts[index])
                 self.cluster_list.append(new_cluster)
                 del new_cluster
 
@@ -85,9 +87,29 @@ class SinglePassCluster:
         new_title_list = []
         new_time_list = []
         new_vec_list = []
+        new_comments = []
+        new_reposts = []
         print("**********single-pass cluster result******")
+
         # 对簇列表重新排序，并仅显示节点最多的前self.top个内容
-        print_cluster_list = sorted(self.cluster_list, key=lambda ClusterUnit: ClusterUnit.node_num, reverse=True)[:self.top]
+        alpha = 0.6
+        beta = 0.2
+        gamma = 0.2
+        print_cluster_list = sorted(self.cluster_list, key=lambda ClusterUnit: ClusterUnit.c_num, reverse=True)[
+                             :self.top]
+        c_max = print_cluster_list[0].c_num
+        if c_max == 0:
+            print("error: c_max = 0")
+            c_max = 1
+        print_cluster_list = sorted(self.cluster_list, key=lambda ClusterUnit: ClusterUnit.r_num, reverse=True)[
+                             :self.top]
+        r_max = print_cluster_list[0].r_num
+        if r_max == 0:
+            print("error: r_max = 0")
+            r_max = 1
+        print_cluster_list = sorted(self.cluster_list, key=lambda ClusterUnit: ClusterUnit.node_num, reverse=True)[
+                             :self.top]
+        n_max = print_cluster_list[0].node_num
         for index, one_cluster in enumerate(print_cluster_list):
             print("cluster_index:%s" % index)
             print("簇中结点个数为:%s" % one_cluster.node_num)
@@ -101,11 +123,18 @@ class SinglePassCluster:
             print("发布时间%s" % one_cluster.time_list)
             print("相似度:%s" % one_cluster.similarity_list)
             print("起始时间:%s 结束时间:%s" % (one_cluster.first_title, one_cluster.last_title))
+            print("评论数:%s" % one_cluster.comments)
+            print("转发数:%s" % one_cluster.reposts)
+            one_cluster.hot = alpha * one_cluster.node_num / n_max + beta * one_cluster.c_num / c_max + gamma * one_cluster.r_num / r_max
+            # one_cluster.hot = sum(map(eval, one_cluster.comments)) + sum(map(eval, one_cluster.reposts)) + one_cluster.node_num
+            print("总热度:%s" % one_cluster.hot)
             print('\n')
             new_id_list.extend(one_cluster.id_list)
             new_title_list.extend(one_cluster.title_list)
             new_time_list.extend(one_cluster.time_list)
             new_vec_list.extend(one_cluster.vec_list)
+            new_comments.extend(one_cluster.comments)
+            new_reposts.extend(one_cluster.reposts)
             if label_dict is not None:
                 # 若有提供标签字典，则输出该簇的标签
                 print(" ".join([label_dict[n] for n in one_cluster.node_list]))
@@ -114,4 +143,4 @@ class SinglePassCluster:
         print("the number of nodes %s" % len(self.vectors))
         print("the number of cluster %s" % self.cluster_num)
         print("spend time %.5fs" % self.spend_time)
-        return new_id_list, new_title_list, new_time_list, new_vec_list
+        return new_id_list, new_title_list, new_time_list, new_vec_list, new_comments, new_reposts

@@ -14,6 +14,10 @@ class WeiboHandler(xml.sax.ContentHandler):
         self.Article = []
         self.time = ""
         self.Time = []
+        self.comments = ""
+        self.Comments = []
+        self.reposts = ""
+        self.Reposts = []
 
     # 元素开始调用
     def startElement(self, tag, attributes):
@@ -22,36 +26,50 @@ class WeiboHandler(xml.sax.ContentHandler):
     # 元素结束调用
     # 标签名根据xml文件自身情况更改
     def endElement(self, tag):
-        # if self.CurrentData == "id":
-        if self.CurrentData == "weiboId":
+        if self.CurrentData == "id":
+        # if self.CurrentData == "weiboId":
             # print("id:", self.id)
             self.Id.append(self.id)
             # print("Id:", self.Id)
-        # elif self.CurrentData == "article":
-        elif self.CurrentData == "text":
-            self.article = re.sub(r'【.*?要闻回顾】|转发微博|\[.*?\]|（分享自 @.*?）|（来自.*?）|（via.*?）|奉上今日《台州商报》主要内容|@ .*? |@.*? |//@.*$|→[a-zA-z]+://[^\s]*|[a-zA-z]+://[^\s]*| - .*$|_.*? |&.*?;|quot;|apos;|amp;|lt;|gt;', "", self.article)
+        elif self.CurrentData == "article":
+        # elif self.CurrentData == "text":
+            self.article = re.sub(
+                r'【.*?要闻回顾】|转发微博|\[.*?\]|（分享自 @.*?）|（来自.*?）|（via.*?）|奉上今日《台州商报》主要内容|@ .*? |@.*? |//@.*$|→[a-zA-z]+://[^\s]*|[a-zA-z]+://[^\s]*| - .*$|_.*? |&.*?;|quot;|apos;|amp;|lt;|gt;',
+                "", self.article)
             # print("article:", self.article)
             # self.article = re.findall(r'#.*?#', self.article)
             # print("重点:", self.article)
             self.Article.append(self.article)
             # print("Article:", Article)
-        # elif self.CurrentData == "time":
-        elif self.CurrentData == "created_at":
+        elif self.CurrentData == "time":
+        # elif self.CurrentData == "created_at":
             # print("time:", self.time)
             self.Time.append(self.time)
+        elif self.CurrentData == "discuss":
+        # elif self.CurrentData == "comments_count":
+            self.Comments.append(self.comments)
+        elif self.CurrentData == "transmit":
+        # elif self.CurrentData == "reposts_count":
+            self.Reposts.append(self.reposts)
         self.CurrentData = ""
 
     # 读取字符时调用
     def characters(self, content):
-        # if self.CurrentData == "id":
-        if self.CurrentData == "weiboId":
+        if self.CurrentData == "id":
+        # if self.CurrentData == "weiboId":
             self.id = content
-        # elif self.CurrentData == "article":
-        elif self.CurrentData == "text":
+        elif self.CurrentData == "article":
+        # elif self.CurrentData == "text":
             self.article = content
-        # elif self.CurrentData == "time":
-        elif self.CurrentData == "created_at":
+        elif self.CurrentData == "time":
+        # elif self.CurrentData == "created_at":
             self.time = content
+        elif self.CurrentData == "discuss":
+        # elif self.CurrentData == "comments_count":
+            self.comments = content
+        elif self.CurrentData == "transmit":
+        # elif self.CurrentData == "reposts_count":
+            self.reposts = content
 
 
 def read_xml(file):
@@ -65,4 +83,4 @@ def read_xml(file):
     parser.setContentHandler(Handler)
     # parser.parse('test.xml')
     parser.parse(file)
-    return Handler.Id, Handler.Article, Handler.Time
+    return Handler.Id, Handler.Article, Handler.Time, Handler.Comments, Handler.Reposts

@@ -1,7 +1,0 @@
-data.pkl是聚类后保存的二进制文本，可用read_pickle.py执行打开查看具体内容（默认显示前1000个簇，但全部共有2008个簇），建议使用调试命令，可以查看具体内部数据存储情况。
-
-具体对应的存储方式与含义可以查看Single-Pass.py与cluster_unit.py。
-
-若使用调试功能，展开new_data后可以看到的内容均为Single-Pass.py中保存的内容，再次展开cluster_list后可以看到的内容均为cluster_unit.py中保存的内容
-
-最新测试.txt为我复制下来的聚类结果，可直接查看

@@ -19,8 +19,11 @@ class ClusterUnit:
         self.new_title = None  # 当前节点的时间
         self.first_title = None  # 该簇目前最早的时间
         self.last_title = None  # 该簇目前最晚的时间
+        self.comments = []  # 该簇目前包含的评论数
+        self.reposts = []  # 该簇目前包含的转发数
+        self.hot = 0  # 该簇的热度
 
-    def addNode(self, node=0, node_vec=None, title=None, id=None, time=None, max_similarity=1):
+    def addNode(self, node=0, node_vec=None, title=None, id=None, time=None, comments=0, reposts=0, max_similarity=1):
         """
         为本簇添加指定结点，并更新簇质心
         :param node: 结点
@@ -38,6 +41,8 @@ class ClusterUnit:
         self.time_list.append(time)
         self.similarity_list.append(max_similarity)
         self.new_title = time
+        self.comments.append(comments)
+        self.reposts.append(reposts)
         try:
             # 更新质心
             self.centroid = (self.node_num * self.centroid + node_vec) / (self.node_num + 1)
