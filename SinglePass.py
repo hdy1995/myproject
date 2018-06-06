@@ -99,13 +99,13 @@ class SinglePassCluster:
                              :self.top]
         c_max = print_cluster_list[0].c_num
         if c_max == 0:
-            print("error: c_max = 0")
+            # print("error: c_max = 0")
             c_max = 1
         print_cluster_list = sorted(self.cluster_list, key=lambda ClusterUnit: ClusterUnit.r_num, reverse=True)[
                              :self.top]
         r_max = print_cluster_list[0].r_num
         if r_max == 0:
-            print("error: r_max = 0")
+            # print("error: r_max = 0")
             r_max = 1
         print_cluster_list = sorted(self.cluster_list, key=lambda ClusterUnit: ClusterUnit.node_num, reverse=True)[
                              :self.top]
@@ -121,7 +121,7 @@ class SinglePassCluster:
             print("微博id:%s" % one_cluster.id_list)
             print("微博内容:%s" % one_cluster.title_list)
             print("发布时间%s" % one_cluster.time_list)
-            print("相似度:%s" % one_cluster.similarity_list)
+            # print("相似度:%s" % one_cluster.similarity_list)
             print("起始时间:%s 结束时间:%s" % (one_cluster.first_title, one_cluster.last_title))
             print("评论数:%s" % one_cluster.comments)
             print("转发数:%s" % one_cluster.reposts)

@@ -116,7 +116,7 @@ cost_time = t_end - t_sta
 print("========================")
 print('总耗时 %.5f 分钟' % (cost_time / 60))
 
-# # 将最终得到结点数最多的20个簇保存下来
-# output = open('test5.pkl', 'wb')
-# pickle.dump(clustering, output)
-# output.close()
+# 将最终得到的结果保存下来
+output = open('test6.pkl', 'wb')
+pickle.dump(clustering, output)
+output.close()
